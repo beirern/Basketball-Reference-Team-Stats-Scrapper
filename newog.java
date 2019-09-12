@@ -183,14 +183,17 @@ public class newog {
 
                 // Make TSV of The Team and Opponent Stats Table
                 // Team and Opponent Stats stores in seperate TSV files
-                printTeamAndOpponentStatsTSV(scan, output, new PrintStream(f), year);
+                printTeamAndOpponentStatsTSV(scan, output, new PrintStream(f));
+
+                // New TSV File for Team Misc Stats
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "team_misc.tsv");
+                output = new PrintStream(f);
+
+                // Make TSV of Team Misc Stats
+                printTeamMiscTSV(scan, output);
 
                 f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "test.txt");
                 output = new PrintStream(f);
-
-                output.println();
-
-                printTeamMisc(scan, output);
 
                 output.println();
 
@@ -953,7 +956,7 @@ public class newog {
         }
     }
 
-    public static void printTeamAndOpponentStatsTSV(Scanner scan, PrintStream team, PrintStream opponent, int year) {
+    public static void printTeamAndOpponentStatsTSV(Scanner scan, PrintStream team, PrintStream opponent) {
         // Lists to store vales for TSV. Each list for values is a player.
         // Temp to store temporary values to be put into headers or values.
         // Pattern and matcher are for regex.
@@ -1056,218 +1059,8 @@ public class newog {
         }
     }
 
-    public static void printTeamMisc(Scanner scan, PrintStream output) {
-        output.println("TEAM MISC");
+    public static void printTeamMiscTSV(Scanner scan, PrintStream output) {
 
-        output.println();
-
-        output.print("|");
-
-        for (int j = 0; j < 78; j++) {
-            output.print(" ");
-        }
-        output.print("|  ");
-
-        String line = scan.nextLine();
-        while (!line.contains("header_advanced")) {
-            line = scan.nextLine();
-        }
-
-        line = bracketBreaker(line);
-        output.print(line); // Print out Advanced Header
-        output.print("   |");
-
-        for (int j = 0; j < 4; j++) {
-            output.print(" ");
-        }
-        line = scan.nextLine();
-        line = bracketBreaker(line);
-        output.print(line); // Print out Offensive Four Factors Header
-        for (int j = 0; j < 3; j++) {
-            output.print(" ");
-        }
-        output.print("|");
-
-        for (int j = 0; j < 4; j++) {
-            output.print(" ");
-        }
-        line = scan.nextLine();
-        line = bracketBreaker(line);
-        output.print(line); // Print out Defensive Four Factors Header
-        for (int j = 0; j < 3; j++) {
-            output.print(" ");
-        }
-        output.print("|");
-
-        for (int j = 0; j < 59; j++) {
-            output.print(" ");
-        }
-        output.println("|");
-
-        line = scan.nextLine();
-        while (!line.contains("data-stat=\"player\"")) {
-            line = scan.nextLine();
-        }
-
-        output.print("|");
-        for (int j = 0; j < 8; j++) {
-            output.print(" ");
-        }
-        output.print("|");
-
-        line = scan.nextLine();
-        for (int j = 0; j < 7; j++) {
-            line = bracketBreaker(line);
-            output.print(line); // Print out Headers
-            for (int k = 0; k < 6 - line.length(); k++) {
-                output.print(" ");
-            }
-            output.print("|");
-            line = scan.nextLine();
-        }
-        for (int j = 0; j < 2; j++) {
-            line = customBracketBreaker(line, 4);
-            int bracket1 = line.indexOf("<");
-            output.print(line.substring(0, bracket1)); // Print out Offensive Rating and Defensive Rating
-            for (int k = 0; k < 6 - line.substring(0, bracket1).length(); k++) {
-                output.print(" ");
-            }
-            output.print("|");
-            line = scan.nextLine();
-        }
-
-        line = customBracketBreaker(line, 3);
-        int bracket1 = line.indexOf("<");
-        output.print(line.substring(0, bracket1)); // Print out Pace
-        for (int k = 0; k < 6 - line.substring(0, bracket1).length(); k++) {
-            output.print(" ");
-        }
-        output.print("|");
-
-        line = scan.nextLine();
-        for (int j = 0; j < 5; j++) {
-            line = customBracketBreaker(line, 4);
-            bracket1 = line.indexOf("<");
-            output.print(line.substring(0, bracket1)); // Print out headers
-            for (int k = 0; k < 6 - line.substring(0, bracket1).length(); k++) {
-                output.print(" ");
-            }
-            output.print("|");
-            line = scan.nextLine();
-        }
-
-        for (int j = 0; j < 3; j++) {
-            line = bracketBreaker(line);
-            output.print(line); // Print out headers
-            for (int k = 0; k < 6 - line.length(); k++) {
-                output.print(" ");
-            }
-            output.print("|");
-            line = scan.nextLine();
-        }
-
-        line = customBracketBreaker(line, 4);
-        bracket1 = line.indexOf("<");
-        output.print(line.substring(0, bracket1)); // Print out DRB%
-        for (int k = 0; k < 6 - line.substring(0, bracket1).length(); k++) {
-            output.print(" ");
-        }
-        output.print("|");
-        line = scan.nextLine();
-
-        line = bracketBreaker(line);
-        output.print(line); // Print out FT/FGA
-        output.print("|                     ");
-        line = scan.nextLine();
-
-        line = bracketBreaker(line);
-        output.print(line); // Print out Arena
-        output.print("           |       ");
-        line = scan.nextLine();
-
-        line = bracketBreaker(line);
-        output.print(line); // Print out Attendance
-        output.print("    |");
-        line = scan.nextLine();
-
-        output.println();
-
-        while (!line.contains("data-stat=\"player\"")) {
-            line = scan.nextLine();
-        }
-
-        line = doubleBracketBreaker(line);
-        bracket1 = line.indexOf("<");
-        output.print("|");
-        output.print(line.substring(0, bracket1)); // Print out Team info
-        for (int j = 0; j < 8 - line.substring(0, bracket1).length(); j++) {
-            output.print(" ");
-        }
-        output.print("|");
-        for (int j = 0; j < 20; j++) {
-            line = doubleBracketBreaker(line);
-            bracket1 = line.indexOf("<");
-            output.print(line.substring(0, bracket1)); // Print out Stats
-            for (int k = 0; k < 6 - line.substring(0, bracket1).length(); k++) {
-                output.print(" ");
-            }
-            output.print("|");
-        }
-
-        line = doubleBracketBreaker(line);
-        bracket1 = line.indexOf("<");
-        output.print(line.substring(0, bracket1)); // Print out Arena
-        for (int k = 0; k < 37 - line.substring(0, bracket1).length(); k++) {
-            output.print(" ");
-        }
-        output.print("|");
-
-        line = doubleBracketBreaker(line);
-        bracket1 = line.indexOf("<");
-        output.print(line.substring(0, bracket1)); // Print out Attendance
-        for (int k = 0; k < 21 - line.substring(0, bracket1).length(); k++) {
-            output.print(" ");
-        }
-        output.print("|");
-
-        output.println();
-
-        line = scan.nextLine();
-        line = doubleBracketBreaker(line);
-        bracket1 = line.indexOf("<");
-        output.print("|");
-        output.print(line.substring(0, bracket1)); // Print out League info
-        for (int j = 0; j < 8 - line.substring(0, bracket1).length(); j++) {
-            output.print(" ");
-        }
-        output.print("|");
-        for (int j = 0; j < 20; j++) {
-            line = doubleBracketBreaker(line);
-            bracket1 = line.indexOf("<");
-            output.print(line.substring(0, bracket1)); // Print out Stats
-            for (int k = 0; k < 6 - line.substring(0, bracket1).length(); k++) {
-                output.print(" ");
-            }
-            output.print("|");
-        }
-
-        line = doubleBracketBreaker(line);
-        bracket1 = line.indexOf("<");
-        output.print(line.substring(0, bracket1)); // Print out Arena
-        for (int k = 0; k < 37 - line.substring(0, bracket1).length(); k++) {
-            output.print(" ");
-        }
-        output.print("|");
-
-        line = doubleBracketBreaker(line);
-        bracket1 = line.indexOf("<");
-        output.print(line.substring(0, bracket1)); // Print out Attendance
-        for (int k = 0; k < 21 - line.substring(0, bracket1).length(); k++) {
-            output.print(" ");
-        }
-        output.print("|");
-
-        output.println();
     }
 
     public static void printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay(
