@@ -189,8 +189,21 @@ public class newog {
                 f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "team_misc.tsv");
                 output = new PrintStream(f);
 
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\"
+                        + "advanced_team_misc.tsv");
+                PrintStream output2 = new PrintStream(f);
+
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\"
+                        + "offensive_four_factors_team_misc.tsv");
+                PrintStream output3 = new PrintStream(f);
+
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\"
+                        + "defensive_four_factors_team_misc.tsv");
+
                 // Make TSV of Team Misc Stats
-                printTeamMiscTSV(scan, output);
+                printTeamMiscTSV(scan, output, output2, output3, new PrintStream(f), year);
+                output2.close(); // Close PrintStream
+                output3.close(); // Close PrintStream
 
                 f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "test.txt");
                 output = new PrintStream(f);
@@ -1059,7 +1072,140 @@ public class newog {
         }
     }
 
-    public static void printTeamMiscTSV(Scanner scan, PrintStream output) {
+    public static void printTeamMiscTSV(Scanner scan, PrintStream miscOutput, PrintStream advancedOutput,
+            PrintStream offFourOutput, PrintStream defFourOutput, int year) {
+        // Lists to store vales for TSV. Each list for values is a player.
+        // Temp to store temporary values to be put into headers or values.
+        // Pattern and matcher are for regex.
+        List<List<String>> headers = new ArrayList<List<String>>();
+        List<List<String>> values = new ArrayList<List<String>>();
+        String temp;
+        Pattern pattern;
+        Matcher matcher;
+        // Loop until finding data
+        // eg: <th aria-label="&nbsp;"...
+        String line = scan.nextLine();
+        while (!line.contains("<th aria-label=")) {
+            line = scan.nextLine();
+        }
+        while (line.contains("<th aria-label=")) { // Skip through top headers
+            line = scan.nextLine();
+        }
+        while (!line.contains("<th aria-label=")) {
+            line = scan.nextLine();
+        }
+        // Add first header, header for misc stats
+        // Takes first 11 headers (misc stats)
+        headers.add(new ArrayList<String>());
+        for (int i = 0; i < 11; i++) {
+            temp = getElementWithinTag(line);
+            if (temp.equals("&nbsp;")) {
+                temp = "";
+            }
+            headers.get(headers.size() - 1).add(temp);
+            line = scan.nextLine();
+        }
+        // Add Second header, header for Advanced stats
+        // Takes 2 headers (Advanced stats)
+        headers.add(new ArrayList<String>());
+        for (int i = 0; i < 2; i++) {
+            headers.get(headers.size() - 1).add(getElementWithinTag(line));
+            line = scan.nextLine();
+        }
+        // Add third header, header for Offensive Four Factor stats
+        // Takes 4 headers (Offensive Four Factor stats)
+        headers.add(new ArrayList<String>());
+        for (int i = 0; i < 4; i++) {
+            headers.get(headers.size() - 1).add(getElementWithinTag(line));
+            line = scan.nextLine();
+        }
+        // Add fourth header, header for Defensive Four Factor stats
+        // Takes 4 headers (Defensive Four Factor stats)
+        headers.add(new ArrayList<String>());
+        for (int i = 0; i < 4; i++) {
+            headers.get(headers.size() - 1).add(getElementWithinTag(line));
+            line = scan.nextLine();
+        }
+        // Add to first header, header for misc stats
+        // Takes 2 headers for Arena and Attendance (misc stats)
+        headers.add(new ArrayList<String>());
+        for (int i = 0; i < 2; i++) {
+            headers.get(0).add(getElementWithinTag(line));
+            line = scan.nextLine();
+        }
+        // Loop until finding actual data
+        // eg: <tr ><th scope="row"...
+        while (!line.contains("data-stat=\"player\"")) {
+            line = scan.nextLine();
+        }
+        // Get all Data for values
+        while (line.contains("</tr>")) {
+            values.add(new ArrayList<String>());
+            pattern = Pattern.compile(">(\\.?[%/[0-9] \\p{L}\\.\\+-]+)<");
+            matcher = pattern.matcher(line);
+            // Add all data to values
+            while (matcher.find()) {
+                values.get(values.size() - 1).add(matcher.group(1));
+            }
+            line = scan.nextLine();
+        }
+        // Add any blanks if necessary
+        if (year <= 1978) {
+            for (int i = 0; i < values.size(); i++) {
+                values.get(i).add(12, ""); // Add blank for 3PAr
+            }
+        }
+        int totalSize = 0; // Total Size of all Headeres
+        for (int i = 0; i < headers.size(); i++) {
+            totalSize += headers.get(i).size();
+        }
+        if (values.size() == totalSize - 2) { // Missing Attendance
+            for (int i = 0; i < values.size(); i++) {
+                values.get(i).add(""); // Add blank for 3PAr
+            }
+        }
+        values.get(1).add(22, ""); // Add for blank Lg Rank for Arena
+        // Print to team_misc.tsv
+        for (int i = 0; i < headers.get(0).size() - 1; i++) { // Print Headers
+            miscOutput.print(headers.get(0).get(i) + "\t");
+        }
+        miscOutput.println(headers.get(0).get(headers.size() - 1));
+
+        for (int i = 0; i < headers.get(0).size() - 1; i++) { // Print Values
+            miscOutput.print(values.get(i) + "\t");
+        }
+        miscOutput.println(values.get(headers.get(0).size() - 1));
+        // Print to advanced_team_misc.tsv
+        for (int i = 0; i < headers.get(1).size() - 1; i++) { // Print Headers
+            advancedOutput.print(headers.get(1).get(i) + "\t");
+        }
+        advancedOutput.println(headers.get(1).get(headers.size() - 1));
+
+        // Print Values
+        for (int i = headers.get(0).size() - 1; i < headers.get(0).size() + headers.get(1).size() - 1; i++) {
+            advancedOutput.print(values.get(i) + "\t");
+        }
+        advancedOutput.println(values.get(headers.get(1).size() - 1));
+        // Print to offensive_four_factors_team_misc.tsv
+        for (int i = 0; i < headers.get(2).size() - 1; i++) { // Print Headers
+            offFourOutput.print(headers.get(2).get(i) + "\t");
+        }
+        offFourOutput.println(headers.get(2).get(headers.size() - 1));
+
+        for (int i = 0; i < values.get(0).size() - 1; i++) { // Print Values
+            offFourOutput.print(values.get(0).get(i) + "\t");
+        }
+        offFourOutput.println(values.get(0).get(headers.size() - 1));
+        // Print to defensive_four_factors_team_misc.tsv
+        for (int i = 0; i < headers.get(3).size() - 1; i++) { // Print Headers
+            defFourOutput.print(headers.get(3).get(i) + "\t");
+        }
+        defFourOutput.println(headers.get(3).get(headers.size() - 1));
+
+        for (int i = 0; i < values.get(0).size() - 1; i++) { // Print Values
+            defFourOutput.print(values.get(0).get(i) + "\t");
+        }
+        defFourOutput.println(values.get(0).get(headers.size() - 1));
 
     }
 
