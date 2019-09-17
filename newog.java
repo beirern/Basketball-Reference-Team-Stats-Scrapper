@@ -133,10 +133,10 @@ public class newog {
 
                 PrintStream output = new PrintStream(f);
 
-                // URL u = new URL("https://www.basketball-reference.com/teams/" + team + "/" +
-                // (year + 1) + ".html");
+                URL u = new URL("https://www.basketball-reference.com/teams/" + team + "/" + (year + 1) + ".html");
 
-                URL u = new URL("https://www.basketball-reference.com/teams/" + "GSW" + "/" + "1976" + ".html");
+                // URL u = new URL("https://www.basketball-reference.com/teams/" + "NYK" + "/" +
+                // "2019" + ".html");
 
                 Scanner scan = new Scanner(u.openStream());
 
@@ -211,23 +211,26 @@ public class newog {
                 // Make TSV of Per Game Stats
                 printPerGameTSV(scan, output, year);
 
-                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "test.txt");
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "totals.tsv");
                 output = new PrintStream(f);
 
-                output.println();
+                // Make TSV of Team Totals
+                printTotalsTSV(scan, output, year);
 
-                printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("TOTALS", scan, output,
-                        year);
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "per_36.tsv");
+                output = new PrintStream(f);
 
-                output.println();
+                // Make TSV of Per 36
+                printPer36TSV(scan, output, year);
 
-                printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PER 36 MINUTES", scan,
-                        output, year);
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "per_100.tsv");
+                output = new PrintStream(f);
 
-                output.println();
+                // Make TSV of Per 100 Poss
+                printPer100TSV(scan, output, year);
 
-                printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PER 100 POSSESSIONS",
-                        scan, output, year);
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "test.txt");
+                output = new PrintStream(f);
 
                 output.println();
 
@@ -1156,7 +1159,6 @@ public class newog {
             line = scan.nextLine();
         }
         // Add any blanks if necessary
-        year = 1976;
         if (year <= 1978) { // No 3's
             for (int i = 0; i < values.size(); i++) {
                 values.get(i).add(12, ""); // Add blank for 3PAr
@@ -1283,7 +1285,6 @@ public class newog {
                 currentPlayer.add(matcher.group(1).trim());
             }
             // Blank for GS
-            year = 1976;
             if (year <= 1980) { // No GS collected
                 currentPlayer.add(4, "");
             }
@@ -1342,6 +1343,21 @@ public class newog {
             output.println(currentPlayer.get(currentPlayer.size() - 1));
         }
         output.close();
+    }
+
+    // Prints Totals, same format as Per Game
+    public static void printTotalsTSV(Scanner scan, PrintStream output, int year) {
+        printPerGameTSV(scan, output, year);
+    }
+
+    // Prints Per 36 Minutes, same format as Per Game
+    public static void printPer36TSV(Scanner scan, PrintStream output, int year) {
+        printPerGameTSV(scan, output, year);
+    }
+
+    // Prints Per 100 Possessions, same format as Per Game
+    public static void printPer100TSV(Scanner scan, PrintStream output, int year) {
+        printPerGameTSV(scan, output, year);
     }
 
     public static void printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay(
