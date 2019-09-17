@@ -147,8 +147,8 @@ public class newog {
 
                 URL u = new URL("https://www.basketball-reference.com/teams/" + team + "/" + (year + 1) + ".html");
 
-                // URL u = new URL("https://www.basketball-reference.com/teams/" + "LAC" + "/" +
-                // "2010" + ".html");
+                // URL u = new URL("https://www.basketball-reference.com/teams/" + "NYK" + "/" +
+                // "2019" + ".html");
 
                 Scanner scan = new Scanner(u.openStream());
 
@@ -242,13 +242,14 @@ public class newog {
                 // Make TSV of Per 100 Poss
                 printPer100TSV(scan, output, year);
 
-                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "test.txt");
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "advanced.tsv");
                 output = new PrintStream(f);
 
-                output.println();
+                // Make TSV for Advanced
+                printAdvancedTSV(scan, output, year);
 
-                printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("ADVANCED", scan, output,
-                        year);
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "test.txt");
+                output = new PrintStream(f);
 
                 output.println();
 
@@ -261,10 +262,11 @@ public class newog {
 
                 if (year >= 2000) { // Shooting and Play by Play available as of 2000-2001 season
 
-                    printShootingHeader(output);
+                    // printShootingHeader(output);
 
-                    printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("SHOOTING", scan,
-                            output, year);
+                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("SHOOTING",
+                    // scan,
+                    // output, year);
 
                     output.println();
 
@@ -272,10 +274,11 @@ public class newog {
                         line = scan.nextLine();
                     }
 
-                    printPlayByPlayHeader(output);
+                    // printPlayByPlayHeader(output);
 
-                    printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAY BY PLAY", scan,
-                            output, year);
+                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAY
+                    // BY PLAY", scan,
+                    // output, year);
 
                     line = scan.nextLine();
 
@@ -289,28 +292,31 @@ public class newog {
                 }
 
                 if (line.contains("<tr>")) { // Get Playoff Stats
-                    printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAYOFFS TOTALS",
-                            scan, output, year);
+                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAYOFFS
+                    // TOTALS",
+                    // scan, output, year);
 
                     output.println();
 
-                    printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAYOFFS PER GAME",
-                            scan, output, year);
+                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAYOFFS
+                    // PER GAME",
+                    // scan, output, year);
 
                     output.println();
 
-                    printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay(
-                            "PLAYOFFS PER 36 MINUTES", scan, output, year);
+                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay(
+                    // "PLAYOFFS PER 36 MINUTES", scan, output, year);
 
                     output.println();
 
-                    printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay(
-                            "PLAYOFFS PER 100 POSSESSIONS", scan, output, year);
+                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay(
+                    // "PLAYOFFS PER 100 POSSESSIONS", scan, output, year);
 
                     output.println();
 
-                    printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAYOFFS ADVANCED",
-                            scan, output, year);
+                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAYOFFS
+                    // ADVANCED",
+                    // scan, output, year);
 
                     output.println();
 
@@ -318,10 +324,11 @@ public class newog {
 
                         output.print("PLAYOFFS ");
 
-                        printShootingHeader(output);
+                        // printShootingHeader(output);
 
-                        printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("SHOOTING", scan,
-                                output, year);
+                        // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("SHOOTING",
+                        // scan,
+                        // output, year);
 
                         output.println();
 
@@ -331,10 +338,11 @@ public class newog {
 
                         output.print("PLAYOFFS ");
 
-                        printPlayByPlayHeader(output);
+                        // printPlayByPlayHeader(output);
 
-                        printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAY BY PLAY",
-                                scan, output, year);
+                        // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAY
+                        // BY PLAY",
+                        // scan, output, year);
 
                         output.println();
 
@@ -355,172 +363,11 @@ public class newog {
 
                     output.println();
 
-                    printSalary(output, scan);
+                    // printSalary(output, scan);
                 }
                 year++;
             }
         }
-    }
-
-    public static void printSalary(PrintStream output, Scanner scan) {
-        output.print("|");
-        output.print("Rk "); // Print out "Rk" Header
-        output.print("|");
-
-        output.print("Name                    "); // Print out "Name" Header
-        output.print("|");
-
-        output.print("      Salary"); // Print out "Name" Header
-        output.println("|");
-
-        String line = scan.nextLine();
-        while (!line.contains("\"center \" data-stat=\"ranker\"")) {
-            line = scan.nextLine();
-        }
-        while (line.contains("\"center \" data-stat=\"ranker\"")) {
-            output.print("|");
-            line = customBracketBreaker(line, 2);
-            int bracket1 = line.indexOf("<");
-            output.print(line.substring(0, bracket1)); // Print Rank
-            for (int i = 0; i < 3 - line.substring(0, bracket1).length(); i++) {
-                output.print(" ");
-            }
-            output.print("|");
-
-            line = customBracketBreaker(line, 2); // Some Players do not have Basketball Reference Link
-            if (line.startsWith("<")) {
-                line = customBracketBreaker(line, 1);
-            }
-            bracket1 = line.indexOf("<");
-            output.print(line.substring(0, bracket1)); // Print Name
-            for (int i = 0; i < 24 - line.substring(0, bracket1).length(); i++) {
-                output.print(" ");
-            }
-            output.print("|");
-
-            line = customBracketBreaker(line, 2); // Some Players do not have Basketball Reference Link
-            if (!line.startsWith("$")) {
-                line = customBracketBreaker(line, 1);
-            }
-            bracket1 = line.indexOf("<");
-            output.print(line.substring(0, bracket1)); // Print Salary
-            for (int i = 0; i < 12 - line.substring(0, bracket1).length(); i++) {
-                output.print(" ");
-            }
-            output.println("|");
-            line = scan.nextLine();
-        }
-    }
-
-    public static void printPlayByPlayHeader(PrintStream output) {
-        output.println("PLAY-BY-PLAY");
-        output.println();
-        output.print("|");
-        for (int j = 0; j < 32; j++) { // Empty Space before Totals
-            output.print(" ");
-        }
-        output.print("|");
-        output.print("Totals   ");
-        output.print("|");
-        output.print("      Position Estimate      ");
-        output.print("|");
-        output.print("+/- Per 100 Poss.");
-        output.print("|");
-        output.print("    Turnovers    ");
-        output.print("|");
-        output.print("Fouls Committed");
-        output.print("|");
-        output.print("  Fouls Drawn  ");
-        output.print("|");
-        output.print("      Misc.      ");
-        output.print("|");
-    }
-
-    public static void printShootingHeader(PrintStream output) {
-        output.println("SHOOTING");
-        output.println();
-        output.print("|");
-        for (int j = 0; j < 126; j++) { // Empty Space before 2-Pt Field Goals
-            output.print(" ");
-        }
-        output.print("|");
-        output.print(" 2-Pt Field Goals ");
-        output.print("|");
-        output.print("       3-Pt Field Goals      ");
-        output.println("|");
-
-        output.print("|");
-        for (int j = 0; j < 32; j++) { // Empty Space before Totals
-            output.print(" ");
-        }
-        output.print("|");
-        output.print("Totals   ");
-        output.print("|");
-        for (int j = 0; j < 5; j++) { // Empty Space
-            output.print(" ");
-        }
-        output.print("|");
-        for (int j = 0; j < 5; j++) { // Empty Space
-            output.print(" ");
-        }
-        output.print("|");
-        output.print("        % of FGA by Distance       ");
-        output.print("|");
-        for (int j = 0; j < 5; j++) { // Empty Space
-            output.print(" ");
-        }
-        output.print("|");
-        output.print("    FG% by Distance    ");
-        output.print("|");
-        for (int j = 0; j < 5; j++) { // Empty Space
-            output.print(" ");
-        }
-        output.print("|");
-        for (int j = 0; j < 6; j++) { // Empty Space
-            output.print(" ");
-        }
-        output.print("|");
-        output.print("   Dunks   ");
-        output.print("|");
-        for (int j = 0; j < 6; j++) { // Empty Space
-            output.print(" ");
-        }
-        output.print("|");
-        output.print("   Corner    ");
-        output.print("|");
-        output.print(" Heaves ");
-        output.print("|");
-    }
-
-    public static String statMaker(String line, int length, int bracketNumber, PrintStream output) {
-        line = customBracketBreaker(line, bracketNumber);
-        int bracket1 = line.indexOf("<");
-        output.print(line.substring(0, bracket1));
-        for (int i = 0; i < length - line.substring(0, bracket1).length(); i++) {
-            output.print(" ");
-        }
-
-        output.print("|");
-        return line;
-    }
-
-    public static String headerMaker(int length, String line, int bracketNumber, PrintStream output) {
-        if (bracketNumber == 1) {
-            line = bracketBreaker(line);
-            output.print(line);
-            for (int i = 0; i < length - line.length(); i++) {
-                output.print(" ");
-            }
-        } else {
-            line = customBracketBreaker(line, bracketNumber);
-            int bracket1 = line.indexOf("<");
-            output.print(line.substring(0, bracket1));
-            for (int i = 0; i < length - line.substring(0, bracket1).length(); i++) {
-                output.print(" ");
-            }
-        }
-        output.print("|");
-        return line;
     }
 
     public static void printTeamSummaryTSV(Scanner scan, PrintStream output) {
@@ -1372,9 +1219,10 @@ public class newog {
     // Prints Totals, same format as Per Game
     public static void printTotalsTSV(Scanner scan, PrintStream output, int year) {
         printPerGameTSV(scan, output, year);
+        output.close();
     }
 
-    // Prints Per 36 Minutes, same format as Per Game
+    // Prints Per 36 Minutes, slightly different from Per Game
     public static void printPer36TSV(Scanner scan, PrintStream output, int year) {
         // Lists to store vales for TSV. Each list for values is a player.
         // Temp to store temporary values to be put into headers or values.
@@ -1495,359 +1343,83 @@ public class newog {
     // Prints Per 100 Possessions, same format as Per 36
     public static void printPer100TSV(Scanner scan, PrintStream output, int year) {
         printPer36TSV(scan, output, year);
+        output.close();
     }
 
-    public static void printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay(
-            String perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay, Scanner scan,
-            PrintStream output, int year) {
-        if (!perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("SHOOTING")
-                && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("PLAY BY PLAY")) {
-            output.println(perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay);
-        }
-        output.println();
-        int amountOfStats = 0;
-        if (!perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("PER 100 POSSESSIONS")
-                && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                        .equals("PLAYOFFS PER 100 POSSESSIONS")) {
-            amountOfStats = 23;
-        } else {
-            amountOfStats = 26;
-        }
+    // Print Advanced, Slightly different from Per 36
+    public static void printAdvancedTSV(Scanner scan, PrintStream output, int year) {
+        // Lists to store vales for TSV. Each list for values is a player.
+        // Temp to store temporary values to be put into headers or values.
+        // Pattern and matcher are for regex.
+        List<String> headers = new ArrayList<String>();
+        List<List<String>> values = new ArrayList<List<String>>();
+        String temp;
+        Pattern pattern;
+        Matcher matcher;
+        // Loop until Finding Team and Opponent Stats Header
+        // eg: <th aria-label="Rank"...
         String line = scan.nextLine();
-
-        while (!line.contains("th aria-label=\"Rank\" data-stat=\"ranker\"")) {
+        while (!line.contains("<th aria-label=")) {
             line = scan.nextLine();
         }
-
-        while (!line.contains("</tr>")) {
-            output.print("|");
-            line = bracketBreaker(line);
-            output.print(line); // Print out "Rk" Header
-            for (int j = 0; j < 3 - line.length(); j++) {
-                output.print(" ");
+        // Get All Headers
+        while (line.contains("<th aria-label=")) {
+            temp = getElementWithinTag(line);
+            if (temp.equals("&nbsp;")) {
+                temp = "";
             }
-            output.print("|");
-
-            line = scan.nextLine();
-            output.print("Name                    "); // Print out "Name" Header
-            output.print("|");
-
-            for (int j = 0; j < 2; j++) {
-                line = scan.nextLine();
-                headerMaker(3, line, 1, output); // Print out "Age", "G" headers
-            }
-
-            // Prints out Header
-
-            if (!perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("ADVANCED")
-                    && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                            .equals("PLAYOFFS ADVANCED")
-                    && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("SHOOTING")
-                    && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                            .equals("PLAY BY PLAY")) { // Print headers for all tables but advanced
-                line = scan.nextLine();
-                headerMaker(3, line, 1, output); // Print out "GS" Header
-                for (int j = 0; j < amountOfStats; j++) { // Print out rest of stats
-                    if (j >= 4 && j <= 10) { // Adjust for no 3's before 1979
-                        if (year >= 1979) {
-                            if (j == 10
-                                    && (!perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                            .equals("PER 36 MINUTES")
-                                            && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                                    .equals("PER 100 POSSESSIONS"))
-                                    && j == 10
-                                    && (!perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                            .equals("PLAYOFFS PER 36 MINUTES")
-                                            && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                                    .equals("PLAYOFFS PER 100 POSSESSIONS"))) { // Effective Field Goal
-                                                                                                // Stat
-                                line = scan.nextLine();
-                                headerMaker(5, line, 4, output);
-                            } else if (j != 10) {
-                                line = scan.nextLine();
-                                headerMaker(5, line, 1, output);
-                            }
-                        }
-                    } else if (j == 20) { // No TOV in 1976
-                        if (year != 1976) {
-                            line = scan.nextLine();
-                            headerMaker(5, line, 1, output);
-                        }
-                    } else if (j == 23) { // Empty Space
-                        if (perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                .equals("PER 100 POSSESSIONS")
-                                || perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                        .equals("PLAYOFFS PER 100 POSSESSIONS")) {
-                            line = scan.nextLine();
-                            headerMaker(1, line, 1, output);
-                        }
-                    } else if (j >= 24) { // Offensive Rating and Defensive Rating
-                        if (perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                .equals("PER 100 POSSESSIONS")
-                                || perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                        .equals("PLAYOFFS PER 100 POSSESSIONS")) {
-                            line = scan.nextLine();
-                            headerMaker(5, line, 4, output);
-                        }
-                    } else { // Rest of stats
-                        line = scan.nextLine();
-                        headerMaker(5, line, 1, output);
-                    }
-                }
-            } else if (perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("ADVANCED")
-                    || perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                            .equals("PLAYOFFS ADVANCED")) { // Advanced Table
-                int amountOfAdvanedStats = 0;
-                if (year == 1976) { // No TOV or USG in 1976
-                    amountOfAdvanedStats = 9;
-                } else if (year <= 1978) { // No 3 pointer until 1979
-                    amountOfAdvanedStats = 11;
-                } else {
-                    amountOfAdvanedStats = 12;
-                }
-                line = scan.nextLine();
-                headerMaker(5, line, 1, output); // Print out MP
-
-                for (int i = 0; i < amountOfAdvanedStats; i++) {
-                    line = scan.nextLine();
-                    headerMaker(5, line, 4, output);
-                }
-                line = scan.nextLine();
-                output.print(" |"); // Empty Space
-                for (int i = 0; i < 3; i++) { // Print out "OWS", "DWS", "WS" Headers
-                    line = scan.nextLine();
-                    headerMaker(5, line, 4, output);
-                }
-                line = scan.nextLine();
-                headerMaker(7, line, 4, output); // "WS/48" Header
-                line = scan.nextLine();
-                output.print(" |"); // Empty Space
-                for (int i = 0; i < 3; i++) { // Print out "OBPM", "DBPM", "BPM" Headers
-                    line = scan.nextLine();
-                    headerMaker(5, line, 4, output);
-                }
-                line = scan.nextLine();
-                headerMaker(5, line, 6, output); // Print out VORP Header
-            } else if (perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("SHOOTING")) { // Shooting
-                for (int i = 0; i < 23; i++) { // Print headers
-                    if (i <= 14) { // Print all headers
-                        if (i == 7) { // Print "16 <3" Header
-                            line = scan.nextLine();
-                            line = customBracketBreaker(line, 2);
-                            int bracket1 = line.indexOf("<", 4);
-                            output.print(line.substring(0, bracket1));
-                            for (int j = 0; j < 5 - line.substring(0, bracket1).length(); j++) {
-                                output.print(" ");
-                            }
-                            output.print("|");
-                        } else if (i == 13) { // Print "16 <3" Header
-                            line = scan.nextLine();
-                            output.print("16 <3");
-                            output.print("|");
-                        } else {
-                            line = scan.nextLine();
-                            headerMaker(5, line, 1, output);
-                        }
-                    } else if (i >= 15 && i <= 16) { // Print out "%Ast'd" and "%FGA" Headers
-                        line = scan.nextLine();
-                        headerMaker(6, line, 1, output);
-                    } else if (i == 17) { // Prints Made Dunks
-                        line = scan.nextLine();
-                        headerMaker(4, line, 2, output);
-                    } else if (i >= 18 && i <= 20) { // Print out "%Ast'd", "%3PA", "3P%" Headers
-                        line = scan.nextLine();
-                        headerMaker(6, line, 1, output);
-                    } else { // Prints out "Att." and "Md." Heaves
-                        line = scan.nextLine();
-                        headerMaker(3, line, 1, output);
-                    }
-                }
-            } else { // Play by Play
-                for (int i = 0; i < 17; i++) { // Print headers
-                    if (i <= 5) { // Headers up to OnCourt
-                        line = scan.nextLine();
-                        headerMaker(5, line, 1, output);
-                    } else if (i >= 6 && i <= 9) { // Print out "OnCourt", "On-Off", "BadPass", "LostBall", "Shoot", and
-                                                   // "Off." Headers
-                        line = scan.nextLine();
-                        headerMaker(8, line, 1, output);
-                    } else if (i >= 10 && i <= 13) { // Print out "Shoot" and "Off." Headers
-                        line = scan.nextLine();
-                        headerMaker(7, line, 1, output);
-                    } else if (i == 14) { // Print out "PGA" Headers
-                        line = scan.nextLine();
-                        headerMaker(5, line, 4, output);
-                    } else { // "And1", and "Blkd" Headers
-                        line = scan.nextLine();
-                        headerMaker(5, line, 1, output);
-                    }
-                }
-            }
-            line = scan.nextLine();
-            output.println();
-        }
-
-        line = scan.nextLine();
-        while (!line.contains("data-stat=\"ranker\"")) {
+            headers.add(temp);
             line = scan.nextLine();
         }
-
-        // Print out Player Statistics
-        while (line.length() > 0) {
-            output.print("|");
-            line = statMaker(line, 3, 2, output); // Print out Rk
-            line = statMaker(line, 24, 3, output); // Print out Name
-            line = statMaker(line, 3, 3, output); // Print out Age
-            if (perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("SHOOTING")
-                    || perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                            .equals("PLAY BY PLAY")) {
-                line = statMaker(line, 3, 2, output); // Print out Games
-            } else {
-                if (year <= 1982) {
-                    line = statMaker(line, 3, 2, output); // Print out Games
-                } else {
-                    line = statMaker(line, 3, 3, output); // Print out Games
-                }
+        // Remove blank before ORtg for Per 100
+        if (headers.indexOf("Offensive Win Shares") != -1) {
+            headers.remove(headers.indexOf("Offensive Win Shares") - 1);
+        }
+        if (headers.indexOf("Offensive Box Plus/Minus") != -1) {
+            headers.remove(headers.indexOf("Offensive Box Plus/Minus") - 1);
+        }
+        // Loop until finding values
+        // eg: <tr ><th scope=...data-stat="ranker"...
+        while (!line.contains("data-stat=\"player\"")) {
+            line = scan.nextLine();
+        }
+        // Get all values
+        while (line.contains("data-stat=\"player\"")) {
+            pattern = Pattern.compile(">(\\.?[%/[0-9]' \\p{L}\\.\\+-]+)<");
+            matcher = pattern.matcher(line);
+            // Add in values to values array
+            values.add(new ArrayList<String>());
+            // Add values to ArrayList just created
+            List<String> currentPlayer = values.get(values.size() - 1);
+            // Loop through each line of values
+            while (matcher.find()) {
+                currentPlayer.add(matcher.group(1).trim());
             }
-            if (!perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("ADVANCED")
-                    && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                            .equals("PLAYOFFS ADVANCED")
-                    && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("SHOOTING")
-                    && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                            .equals("PLAY BY PLAY")) { // No Games Started in Advanced
-                if (year <= 1982) {
-                    line = statMaker(line, 3, 2, output); // Print out Games Started
-                } else {
-                    line = statMaker(line, 3, 3, output); // Print out Games Started
+            // Add blanks for players like JamesOn Curry with less than 1 minute played
+            int minutesPlayed = headers.indexOf("MP");
+            if (currentPlayer.get(minutesPlayed).equals("0") && currentPlayer.size() == 12) {
+                for (int i = currentPlayer.size(); i < headers.size() - 1; i++) {
+                    currentPlayer.add(minutesPlayed + 1, "");
                 }
-            }
-            if (!perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("ADVANCED")
-                    && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                            .equals("PLAYOFFS ADVANCED")
-                    && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("SHOOTING")
-                    && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                            .equals("PLAY BY PLAY")) { // Print headers for all tables but advanced
-                for (int j = 0; j < amountOfStats; j++) { // Print out rest of stats
-                    if (j >= 4 && j <= 10) { // Adjust for no 3's before 1979
-                        if (year >= 1979) {
-                            if ((j == 10
-                                    && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                            .equals("PER 36 MINUTES")
-                                    && j == 10
-                                    && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                            .equals("PER 100 POSSESSIONS"))
-                                    && (j == 10
-                                            && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                                    .equals("PLAYOFFS PER 36 MINUTES")
-                                            && j == 10
-                                            && !perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                                    .equals("PLAYOFFS PER 100 POSSESSIONS"))) { // Per 36 and Per 100
-                                                                                                // does not measure eFG%
-                                line = statMaker(line, 5, 2, output);
-                            } else if (j != 10) {
-                                line = statMaker(line, 5, 2, output);
-                            }
-                        }
-                    } else if (j == 22) {
-                        if (year >= 1977) {
-                            line = statMaker(line, 5, 2, output);
-                        }
-                    } else if (j == 23) {
-                        if (perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                .equals("PER 36 MINUTES")
-                                || perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                        .equals("PER 100 POSSESSIONS")
-                                || perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                        .equals("PLAYOFFS PER 36 MINUTES")
-                                || perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                        .equals("PLAYOFFS PER 100 POSSESSIONS")) {
-                            line = statMaker(line, 1, 2, output);
-                        }
-                    } else if (j >= 24) { // Offensive Rating and Defensive Rating
-                        if (perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                .equals("PER 36 MINUTES")
-                                || perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                        .equals("PER 100 POSSESSIONS")
-                                || perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                        .equals("PLAYOFFS PER 36 MINUTES")
-                                || perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                                        .equals("PLAYOFFS PER 100 POSSESSIONS")) {
-                            line = statMaker(line, 5, 2, output);
-                        }
-                    } else { // Rest of stats
-                        line = statMaker(line, 5, 2, output);
-                    }
-                }
-            } else if (perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("ADVANCED")
-                    || perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay
-                            .equals("PLAYOFFS ADVANCED")) { // Advanced Table
-                int amountOfAdvanedStats = 0;
-                if (year == 1976) { // No TOV or USG in 1976
-                    amountOfAdvanedStats = 9;
-                } else if (year <= 1978) { // No 3 pointer until 1979
-                    amountOfAdvanedStats = 11;
-                } else {
-                    amountOfAdvanedStats = 12;
-                }
-                if (year >= 1983) {
-                    line = statMaker(line, 5, 3, output); // Print out MP
-                } else {
-                    line = statMaker(line, 5, 2, output); // Print out MP
-                }
-                for (int i = 0; i < amountOfAdvanedStats; i++) {
-                    line = statMaker(line, 5, 2, output);
-                }
-                line = statMaker(line, 1, 2, output); // Empty Space
-                for (int i = 0; i < 3; i++) { // Print out "OWS", "DWS", "WS" Headers
-                    line = statMaker(line, 5, 2, output);
-                }
-                line = statMaker(line, 7, 2, output); // "WS/48" Header
-                line = statMaker(line, 1, 2, output); // Empty Space
-                for (int i = 0; i < 4; i++) { // Print out "OBPM", "DBPM", "BPM", and "VORP" Headers
-                    line = statMaker(line, 5, 2, output);
-                }
-            } else if (perGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay.equals("SHOOTING")) { // Shooting
-                for (int i = 0; i < 23; i++) { // Print headers
-                    if (i <= 14) { // Print all headers
-                        line = statMaker(line, 5, 2, output);
-                    } else if (i >= 15 && i <= 16) { // Print out "%Ast'd" and "%FGA" Headers
-                        line = statMaker(line, 6, 2, output);
-                    } else if (i == 17) { // Prints Made Dunks
-                        line = statMaker(line, 4, 2, output);
-                    } else if (i >= 18 && i <= 20) { // Print out "%Ast'd", "%3PA", "3P%" Headers
-                        line = statMaker(line, 6, 2, output);
-                    } else if (i == 21) { // Print out "Att." Heaves
-                        line = statMaker(line, 4, 2, output);
-                    } else { // Print out "Md." Heaves
-                        line = statMaker(line, 3, 2, output);
-                    }
-                }
-            } else { // Play By Play
-                for (int i = 0; i < 17; i++) { // Print headers
-                    if (i <= 5) { // Headers up to OnCourt
-                        line = statMaker(line, 5, 2, output);
-                    } else if (i >= 6 && i <= 7) { // Print out "OnCourt" and "On-Off" Headers
-                        line = statMaker(line, 8, 2, output);
-                    } else if (i >= 8 && i <= 9) { // Print out "BadPass", "LostBall", "Shoot", "Off." Headers
-                        line = statMaker(line, 8, 2, output);
-                    } else if (i >= 10 && i <= 13) { // Print out "Shoot" and "Off." Headers
-                        line = statMaker(line, 7, 2, output);
-                    } else { // Print out "PGA", "And1", and "Blkd" Headers
-                        line = statMaker(line, 5, 2, output);
-                    }
-                }
+                currentPlayer.add(headers.indexOf("Win Shares Per 48 Minutes"), "");
             }
             line = scan.nextLine();
-            output.println();
         }
-    }
+        scan.nextLine();
+        // Print Out Headers and values to TSV
+        for (int i = 0; i < headers.size() - 1; i++) {
+            output.print(headers.get(i) + "\t");
+        }
+        output.println(headers.get(headers.size() - 1));
 
-    public static String bracketBreaker(String line) {
-        int bracket2 = line.indexOf(">");
-        line = line.substring(bracket2 + 1);
-        int bracket1 = line.indexOf("<");
-        line = line.substring(0, bracket1);
-        return line;
+        for (int i = 0; i < values.size(); i++) {
+            List<String> currentPlayer = values.get(i);
+            for (int j = 0; j < currentPlayer.size() - 1; j++) {
+                output.print(currentPlayer.get(j) + "\t");
+            }
+            output.println(currentPlayer.get(currentPlayer.size() - 1));
+        }
+        output.close();
     }
 
     public static String getElementWithinTag(String line) {
@@ -1858,19 +1430,4 @@ public class newog {
         return line;
     }
 
-    public static String doubleBracketBreaker(String line) {
-        int bracket2 = line.indexOf(">");
-        line = line.substring(bracket2 + 1);
-        bracket2 = line.indexOf(">");
-        line = line.substring(bracket2 + 1);
-        return line;
-    }
-
-    public static String customBracketBreaker(String line, int num) {
-        for (int i = 0; i < num; i++) {
-            int index = line.indexOf(">");
-            line = line.substring(index + 1);
-        }
-        return line;
-    }
 }
