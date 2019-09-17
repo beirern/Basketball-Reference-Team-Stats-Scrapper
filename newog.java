@@ -113,7 +113,19 @@ public class newog {
 
                 String nextYear = Integer.toString(year + 1).substring(2);
 
-                Path path = Paths.get(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear);
+                // Make all necessary Paths
+                Path path = Paths.get(
+                        ".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\team_and_opponent_stats");
+                // Checks if directories exist
+                if (!Files.exists(path)) {
+                    try {
+                        Files.createDirectories(path);
+                    } catch (IOException e) {
+                        // Fail to create directories
+                        e.printStackTrace();
+                    }
+                }
+                path = Paths.get(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\team_misc");
                 // Checks if directories exist
                 if (!Files.exists(path)) {
                     try {
@@ -133,10 +145,10 @@ public class newog {
 
                 PrintStream output = new PrintStream(f);
 
-                // URL u = new URL("https://www.basketball-reference.com/teams/" + team + "/" +
-                // (year + 1) + ".html");
+                URL u = new URL("https://www.basketball-reference.com/teams/" + team + "/" + (year + 1) + ".html");
 
-                URL u = new URL("https://www.basketball-reference.com/teams/" + "LAC" + "/" + "2010" + ".html");
+                // URL u = new URL("https://www.basketball-reference.com/teams/" + "LAC" + "/" +
+                // "2010" + ".html");
 
                 Scanner scan = new Scanner(u.openStream());
 
@@ -174,31 +186,32 @@ public class newog {
                 printAssistantCoachesAndStaffTSV(scan, output);
 
                 // New TSV File for Team Stats
-                f = new File(
-                        ".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "team_stats.tsv");
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear
+                        + "\\team_and_opponent_stats" + "\\team_stats.tsv");
                 output = new PrintStream(f);
                 // New TSV file for Opponent Stats
-                f = new File(
-                        ".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "opponent_stats.tsv");
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear
+                        + "\\team_and_opponent_stats" + "\\opponent_stats.tsv");
 
                 // Make TSV of The Team and Opponent Stats Table
                 // Team and Opponent Stats stores in seperate TSV files
                 printTeamAndOpponentStatsTSV(scan, output, new PrintStream(f));
 
                 // New TSV File for Team Misc Stats
-                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "team_misc.tsv");
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\team_misc"
+                        + "\\team_misc.tsv");
                 output = new PrintStream(f);
 
-                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\"
-                        + "advanced_team_misc.tsv");
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\team_misc"
+                        + "\\advanced_team_misc.tsv");
                 PrintStream output2 = new PrintStream(f);
 
-                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\"
-                        + "offensive_four_factors_team_misc.tsv");
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\team_misc"
+                        + "\\offensive_four_factors_team_misc.tsv");
                 PrintStream output3 = new PrintStream(f);
 
-                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\"
-                        + "defensive_four_factors_team_misc.tsv");
+                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\team_misc"
+                        + "\\defensive_four_factors_team_misc.tsv");
 
                 // Make TSV of Team Misc Stats
                 printTeamMiscTSV(scan, output, output2, output3, new PrintStream(f), year);
@@ -1162,7 +1175,6 @@ public class newog {
             line = scan.nextLine();
         }
         // Add any blanks if necessary
-        year = 2010;
         if (year <= 1978) { // No 3's
             for (int i = 0; i < values.size(); i++) {
                 values.get(i).add(12, ""); // Add blank for 3PAr
@@ -1293,7 +1305,6 @@ public class newog {
                 currentPlayer.add(matcher.group(1).trim());
             }
             // Blank for GS
-            year = 2010;
             if (year <= 1980) { // No GS collected
                 currentPlayer.add(4, "");
             }
@@ -1365,12 +1376,125 @@ public class newog {
 
     // Prints Per 36 Minutes, same format as Per Game
     public static void printPer36TSV(Scanner scan, PrintStream output, int year) {
-        printPerGameTSV(scan, output, year);
+        // Lists to store vales for TSV. Each list for values is a player.
+        // Temp to store temporary values to be put into headers or values.
+        // Pattern and matcher are for regex.
+        List<String> headers = new ArrayList<String>();
+        List<List<String>> values = new ArrayList<List<String>>();
+        String temp;
+        Pattern pattern;
+        Matcher matcher;
+        // Loop until Finding Team and Opponent Stats Header
+        // eg: <th aria-label="Rank"...
+        String line = scan.nextLine();
+        while (!line.contains("<th aria-label=")) {
+            line = scan.nextLine();
+        }
+        // Get All Headers
+        while (line.contains("<th aria-label=")) {
+            temp = getElementWithinTag(line);
+            if (temp.equals("&nbsp;")) {
+                temp = "";
+            }
+            headers.add(temp);
+            line = scan.nextLine();
+        }
+        // Remove blank before ORtg for Per 100
+        if (headers.indexOf("Offensive Rating") != -1) {
+            headers.remove(headers.indexOf("Offensive Rating") - 1);
+        }
+        // Loop until finding values
+        // eg: <tr ><th scope=...data-stat="ranker"...
+        while (!line.contains("data-stat=\"player\"")) {
+            line = scan.nextLine();
+        }
+        // Get all values
+        while (line.contains("data-stat=\"player\"")) {
+            pattern = Pattern.compile(">(\\.?[%/[0-9]' \\p{L}\\.\\+-]+)<");
+            matcher = pattern.matcher(line);
+            // Add in values to values array
+            values.add(new ArrayList<String>());
+            // Add values to ArrayList just created
+            List<String> currentPlayer = values.get(values.size() - 1);
+            // Loop through each line of values
+            while (matcher.find()) {
+                currentPlayer.add(matcher.group(1).trim());
+            }
+            // Blank for GS
+            if (year <= 1980) { // No GS collected
+                currentPlayer.add(4, "");
+            }
+            // Add blanks for players like JamesOn Curry with less than 1 minute played
+            int minutesPlayed = headers.indexOf("MP");
+            if (currentPlayer.get(minutesPlayed).equals("0") && currentPlayer.size() == minutesPlayed + 1) {
+                for (int i = currentPlayer.size(); i < headers.size(); i++) {
+                    currentPlayer.add("");
+                }
+            }
+            // If there are blank values that need to be added
+            // Slightly different from perGame since sometimes both 0's still have %
+            if (currentPlayer.size() != headers.size()) {
+                // if taken shots and attempted shots are 0 then % should be blank
+                int shotsTakenIndex = headers.indexOf("FG");
+                int shotsAttemptedIndex = headers.indexOf("FGA");
+                String shotsTaken = currentPlayer.get(shotsTakenIndex);
+                String shotsAttempted = currentPlayer.get(shotsAttemptedIndex);
+                if (shotsTaken.equals("0.0") && shotsAttempted.equals("0.0")) {
+                    currentPlayer.add(headers.indexOf("FG%"), "");
+                }
+                if (year > 1978) { // No 3's before 1979
+                    // 3's
+                    shotsTakenIndex = headers.indexOf("3P");
+                    shotsAttemptedIndex = headers.indexOf("3PA");
+                    shotsTaken = currentPlayer.get(shotsTakenIndex);
+                    shotsAttempted = currentPlayer.get(shotsAttemptedIndex);
+                    if (shotsTaken.equals("0.0") && shotsAttempted.equals("0.0")) {
+                        currentPlayer.add(headers.indexOf("3P%"), "");
+                    }
+                    // 2's
+                    shotsTakenIndex = headers.indexOf("2P");
+                    shotsAttemptedIndex = headers.indexOf("2PA");
+                    shotsTaken = currentPlayer.get(shotsTakenIndex);
+                    shotsAttempted = currentPlayer.get(shotsAttemptedIndex);
+                    if (shotsTaken.equals("0.0") && shotsAttempted.equals("0.0")) {
+                        currentPlayer.add(headers.indexOf("2P%"), "");
+                    }
+                }
+                if (currentPlayer.get(headers.indexOf("FG%")).equals("")) {
+                    // Blank for eFG%
+                    currentPlayer.add(headers.indexOf("Effective Field Goal Percentage"), "");
+                }
+                // Free Throws
+                shotsTakenIndex = headers.indexOf("FT");
+                shotsAttemptedIndex = headers.indexOf("FTA");
+                shotsTaken = currentPlayer.get(shotsTakenIndex);
+                shotsAttempted = currentPlayer.get(shotsAttemptedIndex);
+                if (shotsTaken.equals("0.0") && shotsAttempted.equals("0.0")) {
+                    currentPlayer.add(headers.indexOf("FT%"), "");
+                }
+            }
+            line = scan.nextLine();
+        }
+        scan.nextLine();
+        // Print Out Headers and values to TSV
+        for (int i = 0; i < headers.size() - 1; i++) {
+            output.print(headers.get(i) + "\t");
+        }
+        output.println(headers.get(headers.size() - 1));
+
+        for (int i = 0; i < values.size(); i++) {
+            List<String> currentPlayer = values.get(i);
+            for (int j = 0; j < currentPlayer.size() - 1; j++) {
+                output.print(currentPlayer.get(j) + "\t");
+            }
+            output.println(currentPlayer.get(currentPlayer.size() - 1));
+        }
+        output.close();
     }
 
-    // Prints Per 100 Possessions, same format as Per Game
+    // Prints Per 100 Possessions, same format as Per 36
     public static void printPer100TSV(Scanner scan, PrintStream output, int year) {
-        printPerGameTSV(scan, output, year);
+        printPer36TSV(scan, output, year);
     }
 
     public static void printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay(
