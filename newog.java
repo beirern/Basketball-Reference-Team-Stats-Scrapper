@@ -133,10 +133,10 @@ public class newog {
 
                 PrintStream output = new PrintStream(f);
 
-                URL u = new URL("https://www.basketball-reference.com/teams/" + team + "/" + (year + 1) + ".html");
+                // URL u = new URL("https://www.basketball-reference.com/teams/" + team + "/" +
+                // (year + 1) + ".html");
 
-                // URL u = new URL("https://www.basketball-reference.com/teams/" + "NYK" + "/" +
-                // "2019" + ".html");
+                URL u = new URL("https://www.basketball-reference.com/teams/" + "LAC" + "/" + "2010" + ".html");
 
                 Scanner scan = new Scanner(u.openStream());
 
@@ -932,12 +932,15 @@ public class newog {
         }
         // Loops until table is finished
         while (!line.contains("</table>")) {
-            pattern = Pattern.compile("(\\p{L}+[/ ][\\p{L} ]+)<");
+            pattern = Pattern.compile("(\\p{L}+[/ &;][\\p{L} ]+)<");
             matcher = pattern.matcher(line);
             while (matcher.find()) {
                 String name = matcher.group(1); // Get staff name
                 matcher.find(); // Find next Match
                 String position = matcher.group(1);
+                if (position.contains("nbsp;")) {
+                    position = position.replace("nbsp;", "");
+                }
                 if (!headers.contains(position)) { // Put position into headers
                     headers.add(position);
                     values.add(new ArrayList<String>());
@@ -1159,6 +1162,7 @@ public class newog {
             line = scan.nextLine();
         }
         // Add any blanks if necessary
+        year = 2010;
         if (year <= 1978) { // No 3's
             for (int i = 0; i < values.size(); i++) {
                 values.get(i).add(12, ""); // Add blank for 3PAr
@@ -1267,6 +1271,10 @@ public class newog {
             headers.add(temp);
             line = scan.nextLine();
         }
+        // Remove blank before ORtg for Per 100
+        if (headers.indexOf("Offensive Rating") != -1) {
+            headers.remove(headers.indexOf("Offensive Rating") - 1);
+        }
         // Loop until finding values
         // eg: <tr ><th scope=...data-stat="ranker"...
         while (!line.contains("data-stat=\"player\"")) {
@@ -1285,6 +1293,7 @@ public class newog {
                 currentPlayer.add(matcher.group(1).trim());
             }
             // Blank for GS
+            year = 2010;
             if (year <= 1980) { // No GS collected
                 currentPlayer.add(4, "");
             }
@@ -1315,6 +1324,10 @@ public class newog {
                     if (shotsTaken == 0 && shotsAttempted == 0) {
                         currentPlayer.add(headers.indexOf("2P%"), "");
                     }
+                }
+                if (currentPlayer.get(headers.indexOf("FG%")).equals("")) {
+                    // Blank for eFG%
+                    currentPlayer.add(headers.indexOf("Effective Field Goal Percentage"), "");
                 }
                 // Free Throws
                 shotsTakenIndex = headers.indexOf("FT");
