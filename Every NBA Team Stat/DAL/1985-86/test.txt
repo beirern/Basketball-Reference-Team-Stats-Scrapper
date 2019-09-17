@@ -1,11 +1,4 @@
 
-TEAM MISC
-
-|                                                                              |  Advanced   |    Offense Four Factors   |    Defense Four Factors   |                                                           |
-|        |W     |L     |PW    |PL    |MOV   |SOS   |SRS   |ORtg  |DRtg  |Pace  |FTr   |3PAr  |eFG%  |TOV%  |ORB%  |FT/FGA|eFG%  |TOV%  |DRB%  |FT/FGA|                     Arena           |       Attendance    |
-|Team    |44    |38    |44    |38    |1.10  |-0.40 |0.70  |112.1 |111.0 |102.2 |.364  |.061  |.510  |13.3  |30.0  |.283  |.508  |13.0  |66.8  |.201  |Reunion Arena                        |693,052              |
-|Lg Rank |9     |15    |9     |9     |9     |19    |9     |2     |20    |12    |8     |1     |3     |2     |20    |4     |20    |23    |15    |1     |                                     |2                    |
-
 PER GAME
 
 |Rk |Name                    |Age|G  |GS |MP   |FG   |FGA  |FG%  |3P   |3PA  |3P%  |2P   |2PA  |2P%  |eFG% |FT   |FTA  |FT%  |ORB  |DRB  |TRB  |AST  |STL  |BLK  |TOV  |PF   |PTS/G|

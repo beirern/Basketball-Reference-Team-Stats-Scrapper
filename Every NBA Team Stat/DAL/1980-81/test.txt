@@ -1,11 +1,4 @@
 
-TEAM MISC
-
-|                                                                              |  Advanced   |    Offense Four Factors   |    Defense Four Factors   |                                                           |
-|        |W     |L     |PW    |PL    |MOV   |SOS   |SRS   |ORtg  |DRtg  |Pace  |FTr   |3PAr  |eFG%  |TOV%  |ORB%  |FT/FGA|eFG%  |TOV%  |DRB%  |FT/FGA|                     Arena           |       Attendance    |
-|Team    |17    |65    |19    |63    |-9.21 |0.28  |-8.93 |104.5 |113.7 |99.6  |.270  |.334  |.490  |12.4  |22.1  |.205  |.533  |11.7  |76.1  |.203  |Madison Square Garden (IV)           |779,087              |
-|Lg Rank |30    |1     |29    |29    |28    |7     |29    |30    |26    |17    |8     |22    |30    |16    |18    |11    |23    |21    |24    |20    |                                     |9                    |
-
 PER GAME
 
 |Rk |Name                    |Age|G  |GS |MP   |FG   |FGA  |FG%  |3P   |3PA  |3P%  |2P   |2PA  |2P%  |eFG% |FT   |FTA  |FT%  |ORB  |DRB  |TRB  |AST  |STL  |BLK  |TOV  |PF   |PTS/G|

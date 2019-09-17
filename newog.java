@@ -1128,7 +1128,6 @@ public class newog {
         }
         // Add to first header, header for misc stats
         // Takes 2 headers for Arena and Attendance (misc stats)
-        headers.add(new ArrayList<String>());
         for (int i = 0; i < 2; i++) {
             headers.get(0).add(getElementWithinTag(line));
             line = scan.nextLine();
@@ -1141,7 +1140,7 @@ public class newog {
         // Get all Data for values
         while (line.contains("</tr>")) {
             values.add(new ArrayList<String>());
-            pattern = Pattern.compile(">(\\.?[%/[0-9] \\p{L}\\.\\+-]+)<");
+            pattern = Pattern.compile(">(\\.?[%/[0-9] \\p{L}\\.\\+\\(\\),-]+)<");
             matcher = pattern.matcher(line);
             // Add all data to values
             while (matcher.find()) {
@@ -1150,7 +1149,7 @@ public class newog {
             line = scan.nextLine();
         }
         // Add any blanks if necessary
-        if (year <= 1978) {
+        if (year <= 1978) { // No 3's
             for (int i = 0; i < values.size(); i++) {
                 values.get(i).add(12, ""); // Add blank for 3PAr
             }
@@ -1159,54 +1158,81 @@ public class newog {
         for (int i = 0; i < headers.size(); i++) {
             totalSize += headers.get(i).size();
         }
-        if (values.size() == totalSize - 2) { // Missing Attendance
+        if (values.get(0).size() == totalSize - 1) { // Missing Attendance
             for (int i = 0; i < values.size(); i++) {
-                values.get(i).add(""); // Add blank for 3PAr
+                values.get(i).add(""); // Add blank for Attendance
             }
         }
-        values.get(1).add(22, ""); // Add for blank Lg Rank for Arena
+        values.get(1).add(21, ""); // Add for blank Lg Rank for Arena
+        // Print all Things
+        System.out.println(headers);
+        System.out.println(values);
         // Print to team_misc.tsv
-        for (int i = 0; i < headers.get(0).size() - 1; i++) { // Print Headers
+        // Print Headers
+        for (int i = 0; i < headers.get(0).size() - 1; i++) {
             miscOutput.print(headers.get(0).get(i) + "\t");
         }
-        miscOutput.println(headers.get(0).get(headers.size() - 1));
-
-        for (int i = 0; i < headers.get(0).size() - 1; i++) { // Print Values
-            miscOutput.print(values.get(i) + "\t");
+        miscOutput.println(headers.get(0).get(headers.get(0).size() - 1));
+        for (int i = 0; i < values.size(); i++) { // Print each row of table
+            // Print Values
+            for (int k = 0; k < headers.get(0).size() - 2; k++) { // Compensate for Arena & Attendance
+                miscOutput.print(values.get(i).get(k) + "\t");
+            }
+            miscOutput.print(values.get(i).get(values.get(i).size() - 2) + "\t");
+            miscOutput.println(values.get(i).get(values.get(i).size() - 1));
         }
-        miscOutput.println(values.get(headers.get(0).size() - 1));
+
         // Print to advanced_team_misc.tsv
-        for (int i = 0; i < headers.get(1).size() - 1; i++) { // Print Headers
+        // Print Headers
+        for (int i = 0; i < headers.get(1).size() - 1; i++) {
             advancedOutput.print(headers.get(1).get(i) + "\t");
         }
-        advancedOutput.println(headers.get(1).get(headers.size() - 1));
-
+        advancedOutput.println(headers.get(1).get(headers.get(1).size() - 1));
         // Print Values
-        for (int i = headers.get(0).size() - 1; i < headers.get(0).size() + headers.get(1).size() - 1; i++) {
-            advancedOutput.print(values.get(i) + "\t");
+        for (int i = 0; i < values.size(); i++) {
+            // Compensate for Arena & Attendance being in other header
+            int startIndex = headers.get(0).size() - 2;
+            int endIndex = startIndex + headers.get(1).size() - 1;
+            for (int j = startIndex; j < endIndex; j++) {
+                advancedOutput.print(values.get(i).get(j) + "\t");
+            }
+            advancedOutput.println(values.get(i).get(endIndex));
         }
-        advancedOutput.println(values.get(headers.get(1).size() - 1));
+
         // Print to offensive_four_factors_team_misc.tsv
-        for (int i = 0; i < headers.get(2).size() - 1; i++) { // Print Headers
+        // Print Headers
+        for (int i = 0; i < headers.get(2).size() - 1; i++) {
             offFourOutput.print(headers.get(2).get(i) + "\t");
         }
-        offFourOutput.println(headers.get(2).get(headers.size() - 1));
-
-        for (int i = 0; i < values.get(0).size() - 1; i++) { // Print Values
-            offFourOutput.print(values.get(0).get(i) + "\t");
+        offFourOutput.println(headers.get(2).get(headers.get(2).size() - 1));
+        // Print Values
+        for (int i = 0; i < values.size(); i++) {
+            // Compensate for Arena & Attendance
+            int startIndex = headers.get(0).size() + headers.get(1).size() - 2;
+            int endIndex = startIndex + headers.get(2).size() - 1;
+            for (int j = startIndex; j < endIndex; j++) { // Print Values
+                offFourOutput.print(values.get(i).get(j) + "\t");
+            }
+            offFourOutput.println(values.get(i).get(endIndex));
         }
-        offFourOutput.println(values.get(0).get(headers.size() - 1));
+
         // Print to defensive_four_factors_team_misc.tsv
-        for (int i = 0; i < headers.get(3).size() - 1; i++) { // Print Headers
+        // Print Headers
+        for (int i = 0; i < headers.get(3).size() - 1; i++) {
             defFourOutput.print(headers.get(3).get(i) + "\t");
         }
-        defFourOutput.println(headers.get(3).get(headers.size() - 1));
-
-        for (int i = 0; i < values.get(0).size() - 1; i++) { // Print Values
-            defFourOutput.print(values.get(0).get(i) + "\t");
+        defFourOutput.println(headers.get(3).get(headers.get(3).size() - 1));
+        // Print Values
+        for (int i = 0; i < values.size(); i++) {
+            int startIndex = headers.get(0).size() + headers.get(1).size() + headers.get(2).size() - 2;
+            int endIndex = startIndex + headers.get(3).size() - 1;
+            for (int j = startIndex; j < endIndex; j++) {
+                defFourOutput.print(values.get(i).get(j) + "\t");
+            }
+            defFourOutput.println(values.get(i).get(endIndex));
         }
-        defFourOutput.println(values.get(0).get(headers.size() - 1));
 
+        scan.nextLine(); // Go to Next Line to not confuse Looping
     }
 
     public static void printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay(
