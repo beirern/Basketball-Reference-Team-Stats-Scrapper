@@ -139,15 +139,11 @@ public class newog {
                 File f = new File(
                         ".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "season_summary.tsv");
 
-                // File f = new File("C:\\Users\\nicol\\OneDrive\\Documents\\NBA\\Every NBA Team
-                // Stat\\" + "NYK" + "\\"
-                // + "2018" + "-" + "2019" + ".txt");
-
                 PrintStream output = new PrintStream(f);
 
                 URL u = new URL("https://www.basketball-reference.com/teams/" + team + "/" + (year + 1) + ".html");
 
-                // URL u = new URL("https://www.basketball-reference.com/teams/" + "NYK" + "/" +
+                // URL u = new URL("https://www.basketball-reference.com/teams/" + "GSW" + "/" +
                 // "2019" + ".html");
 
                 Scanner scan = new Scanner(u.openStream());
@@ -248,31 +244,25 @@ public class newog {
                 // Make TSV for Advanced
                 printAdvancedTSV(scan, output, year);
 
-                f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "test.txt");
-                output = new PrintStream(f);
-
-                output.println();
-
-                line = scan.nextLine();
-
-                while (!line.contains("<tr>") && !line.contains("<!-- global.nonempty_tables_num:")
-                        && !line.contains("\"all_salaries2\"")) {
+                // Loop until Shooting, playoffs, salaries, or end of file
+                while (!line.contains("all_shooting") && !line.contains("all_playoffs_totals")
+                        && !line.contains("\"all_salaries2\"") && !line.contains("<!-- global.nonempty_tables_num:")) {
                     line = scan.nextLine();
                 }
 
-                if (year >= 2000) { // Shooting and Play by Play available as of 2000-2001 season
-
+                if (line.contains("all_shooting")) { // Shooting and Play by Play available as of 2000-2001 season
+                    line = scan.nextLine();
                     // printShootingHeader(output);
 
                     // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("SHOOTING",
                     // scan,
                     // output, year);
 
-                    output.println();
+                    // output.println();
 
-                    while (!line.contains("<tr>")) {
-                        line = scan.nextLine();
-                    }
+                    // while (!line.contains("<tr>")) {
+                    // line = scan.nextLine();
+                    // }
 
                     // printPlayByPlayHeader(output);
 
@@ -280,73 +270,83 @@ public class newog {
                     // BY PLAY", scan,
                     // output, year);
 
-                    line = scan.nextLine();
+                    // line = scan.nextLine();
 
-                    output.println();
+                    // output.println();
 
                 }
 
-                while (!line.contains("<tr>") && !line.contains("\"all_salaries2\"")
-                        && !line.contains("<!-- global.nonempty_tables_num:")) {
+                while (!line.contains("all_shooting") && !line.contains("all_playoffs_totals")
+                        && !line.contains("\"all_salaries2\"") && !line.contains("<!-- global.nonempty_tables_num:")) {
                     line = scan.nextLine();
                 }
 
-                if (line.contains("<tr>")) { // Get Playoff Stats
-                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAYOFFS
-                    // TOTALS",
-                    // scan, output, year);
+                if (line.contains("all_playoffs_totals")) { // Print Playoff Stats
+                    // Print playoff totals
+                    f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\"
+                            + "playoff_totals.tsv");
+                    output = new PrintStream(f);
 
-                    output.println();
+                    printTotalsTSV(scan, output, year);
 
-                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAYOFFS
-                    // PER GAME",
-                    // scan, output, year);
+                    // Pring Playoff Per Game
+                    f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\"
+                            + "playoff_per_game.tsv");
+                    output = new PrintStream(f);
 
-                    output.println();
+                    printPerGameTSV(scan, output, year);
 
-                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay(
-                    // "PLAYOFFS PER 36 MINUTES", scan, output, year);
+                    // Print Per 36
+                    f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\"
+                            + "playoff_per_36.tsv");
+                    output = new PrintStream(f);
 
-                    output.println();
+                    printPer36TSV(scan, output, year);
 
-                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay(
-                    // "PLAYOFFS PER 100 POSSESSIONS", scan, output, year);
+                    // Print Per 100
+                    f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\"
+                            + "playoff_per_100.tsv");
+                    output = new PrintStream(f);
 
-                    output.println();
+                    printPer100TSV(scan, output, year);
 
-                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAYOFFS
-                    // ADVANCED",
-                    // scan, output, year);
+                    // Print Advanced
+                    f = new File(".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\"
+                            + "playoff_advanced.tsv");
+                    output = new PrintStream(f);
 
-                    output.println();
+                    printAdvancedTSV(scan, output, year);
 
-                    if (year >= 2000) { // Shooting and Play by Play available as of 2000-2001 season
+                    // if (year >= 2000) { // Shooting and Play by Play available as of 2000-2001
+                    // season
 
-                        output.print("PLAYOFFS ");
+                    // output.print("PLAYOFFS ");
 
-                        // printShootingHeader(output);
+                    // // printShootingHeader(output);
 
-                        // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("SHOOTING",
-                        // scan,
-                        // output, year);
+                    // //
+                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("SHOOTING",
+                    // // scan,
+                    // // output, year);
 
-                        output.println();
+                    // output.println();
 
-                        while (!line.contains("<tr>")) {
-                            line = scan.nextLine();
-                        }
+                    // while (!line.contains("<tr>")) {
+                    // line = scan.nextLine();
+                    // }
 
-                        output.print("PLAYOFFS ");
+                    // output.print("PLAYOFFS ");
 
-                        // printPlayByPlayHeader(output);
+                    // // printPlayByPlayHeader(output);
 
-                        // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAY
-                        // BY PLAY",
-                        // scan, output, year);
+                    // //
+                    // printPerGameOrTotalsOrPer36OrPer100OrAdvancedOrPlayoffsOrShootingOrPlayByPlay("PLAY
+                    // // BY PLAY",
+                    // // scan, output, year);
 
-                        output.println();
+                    // output.println();
 
-                    }
+                    // }
                 }
 
                 while (!line.contains("\"all_salaries2\"") && !line.contains("<!-- global.nonempty_tables_num:")) {
@@ -359,11 +359,12 @@ public class newog {
                         line = scan.nextLine();
                     }
 
-                    output.println("SALARY");
+                    // Print Salaries if available
+                    f = new File(
+                            ".\\Every NBA Team Stat\\" + team + "\\" + year + "-" + nextYear + "\\" + "salaries.tsv");
+                    output = new PrintStream(f);
 
-                    output.println();
-
-                    // printSalary(output, scan);
+                    printSalaryTSV(scan, output);
                 }
                 year++;
             }
@@ -1402,6 +1403,67 @@ public class newog {
                     currentPlayer.add(minutesPlayed + 1, "");
                 }
                 currentPlayer.add(headers.indexOf("Win Shares Per 48 Minutes"), "");
+            }
+            line = scan.nextLine();
+        }
+        scan.nextLine();
+        // Print Out Headers and values to TSV
+        for (int i = 0; i < headers.size() - 1; i++) {
+            output.print(headers.get(i) + "\t");
+        }
+        output.println(headers.get(headers.size() - 1));
+
+        for (int i = 0; i < values.size(); i++) {
+            List<String> currentPlayer = values.get(i);
+            for (int j = 0; j < currentPlayer.size() - 1; j++) {
+                output.print(currentPlayer.get(j) + "\t");
+            }
+            output.println(currentPlayer.get(currentPlayer.size() - 1));
+        }
+        output.close();
+    }
+
+    // Prints Out Salary if Available
+    public static void printSalaryTSV(Scanner scan, PrintStream output) {
+        // Lists to store vales for TSV. Each list for values is a player.
+        // Temp to store temporary values to be put into headers or values.
+        // Pattern and matcher are for regex.
+        List<String> headers = new ArrayList<String>();
+        List<List<String>> values = new ArrayList<List<String>>();
+        String temp;
+        Pattern pattern;
+        Matcher matcher;
+        // Loop to first Header
+        // eg: <th aria-label="Rank" data-stat="ranker"
+        String line = scan.nextLine();
+        while (!line.contains("<th aria-label=")) {
+            line = scan.nextLine();
+        }
+        // Get All Headers
+        while (line.contains("<th aria-label=")) {
+            temp = getElementWithinTag(line);
+            if (temp.equals("&nbsp;")) {
+                temp = "";
+            }
+            headers.add(temp);
+            line = scan.nextLine();
+        }
+        // Go to Values
+        // eg: <tr ><th scope="row" class="center " data-stat="ranker"
+        while (!line.contains("data-stat=\"ranker\"")) {
+            line = scan.nextLine();
+        }
+        // Get all Values
+        while (line.contains("data-stat=\"ranker\"")) {
+            pattern = Pattern.compile(">\\$?([,/[0-9]' \\p{L}]+)<");
+            matcher = pattern.matcher(line);
+            // Add in values to values array
+            values.add(new ArrayList<String>());
+            // Add values to ArrayList just created
+            List<String> currentPlayer = values.get(values.size() - 1);
+            // Loop through each line of values
+            while (matcher.find()) {
+                currentPlayer.add(matcher.group(1).trim().replace(",", ""));
             }
             line = scan.nextLine();
         }
