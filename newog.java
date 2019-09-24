@@ -459,20 +459,22 @@ public class newog {
         while (!line.contains("<strong>")) {
             line = scan.nextLine();
         }
-        headers.add("Executive");// Add in Executive to headers
-        pattern = Pattern.compile(">(\\p{L}+ \\p{L}+)<"); // Regex name
-        matcher = pattern.matcher(line);
-        // Get first Executive
-        if (matcher.find()) {
-            temp = matcher.group(1);
-        }
-        // Get other Executives if applicable, space seperated
-        while (matcher.find()) {
-            temp += " " + matcher.group(1);
-        }
-        values.add(temp.trim());
+        if (line.contains("Executive")) {
+            headers.add("Executive");// Add in Executive to headers
+            pattern = Pattern.compile(">(\\p{L}+ \\p{L}+)<"); // Regex name
+            matcher = pattern.matcher(line);
+            // Get first Executive
+            if (matcher.find()) {
+                temp = matcher.group(1);
+            }
+            // Get other Executives if applicable, space seperated
+            while (matcher.find()) {
+                temp += " " + matcher.group(1);
+            }
+            values.add(temp.trim());
 
-        line = scan.nextLine();
+            line = scan.nextLine();
+        }
         // Loop to next value
         // eg: <strong>PTS/G:</strong>
         while (!line.contains("<strong>")) {
@@ -793,7 +795,7 @@ public class newog {
         }
         // Loops until table is finished
         while (!line.contains("</table>")) {
-            pattern = Pattern.compile("(\\p{L}+[/ &;][\\p{L} ]+)<");
+            pattern = Pattern.compile("([\\p{L}'-\\.]+[/ -&;][\\p{L}- \\.']+)<");
             matcher = pattern.matcher(line);
             while (matcher.find()) {
                 String name = matcher.group(1); // Get staff name
@@ -1183,10 +1185,10 @@ public class newog {
                     if (shotsTaken == 0 && shotsAttempted == 0) {
                         currentPlayer.add(headers.indexOf("2P%"), "");
                     }
-                }
-                if (currentPlayer.get(headers.indexOf("FG%")).equals("")) {
-                    // Blank for eFG%
-                    currentPlayer.add(headers.indexOf("Effective Field Goal Percentage"), "");
+                    if (currentPlayer.get(headers.indexOf("FG%")).equals("")) {
+                        // Blank for eFG%
+                        currentPlayer.add(headers.indexOf("Effective Field Goal Percentage"), "");
+                    }
                 }
                 // Free Throws
                 shotsTakenIndex = headers.indexOf("FT");
@@ -1308,10 +1310,6 @@ public class newog {
                     if (shotsTaken.equals("0.0") && shotsAttempted.equals("0.0")) {
                         currentPlayer.add(headers.indexOf("2P%"), "");
                     }
-                }
-                if (currentPlayer.get(headers.indexOf("FG%")).equals("")) {
-                    // Blank for eFG%
-                    currentPlayer.add(headers.indexOf("Effective Field Goal Percentage"), "");
                 }
                 // Free Throws
                 shotsTakenIndex = headers.indexOf("FT");
