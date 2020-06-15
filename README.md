@@ -14,12 +14,15 @@ to scrap every team stats page from basketball reference starting from 1976 (Whe
 team stats because kaggle already has individual [player stats](https://www.kaggle.com/drgilermo/nba-players-stats).
 
 ## How does it work
-It really doesn't. I came back to this to make this README and at this time it doesn't work. The way I built this is terrible. I used Java because
-it was the only language I knew at the time. I downloaded the HTML of every single team's website and then parse through the entire HTML
-using Regex to get to each table and get each stat. Extremely slow to say the least...
+It really doesn't. I came back to this to make this README and at this time it doesn't work. The way I built this is terrible. I used Java because it was the only language I knew at the time. I downloaded the HTML of every single team's website and then parse through the entire HTML using Regex to get to each table and get each stat. Extremely slow to say the least...
+
+I ran this from terminal. Don't ask about the name of the file, even longer story.
+
+1. `Javac newog.java`
+2. `Java newog`
+
+Again this really should not work, at least not when I tried it.
 
 ## So you never got it to work!
-Slow down Scrooge! I did get it to work when I initally wrote it! Here it is: [My Dataset](https://www.kaggle.com/nick127/basketball-reference-team-page-stats).
-It has a whopping 3.5 usability but it is all there! Each team has it's own folder (This is sensitive to name/location changes) and within
-each folder there are folders based on the year. Then there are csv files and folders which contain csv files with all the tables, you can
-probably see why no one has used this dataset yet.
+Slow down Scrooge! I did get it to work when I initally wrote it! Here it is: [My Dataset](https://www.kaggle.com/nick127/basketball-reference-team-page-stats). All the files are also contained in the `Every NBA Team Stat.zip` file.
+It has a whopping 3.5 usability but it is all there! Each team has it's own folder (This is sensitive to name/location changes) and within each folder there are folders based on the year. Then there are csv files and folders which contain csv files with all the tables, you can probably see why no one has used this dataset yet.
