@@ -13,6 +13,9 @@ crime stats website and built a Java app that made querying the data easier. I w
 to scrap every team stats page from basketball reference starting from 1976 (When NBA was official after ABA and NBA merger). I chose the
 team stats because kaggle already has individual [player stats](https://www.kaggle.com/drgilermo/nba-players-stats).
 
+## Requirements
+Just Java!
+
 ## How does it work
 It really doesn't. I came back to this to make this README and at this time it doesn't work. The way I built this is terrible. I used Java because it was the only language I knew at the time. I downloaded the HTML of every single team's website and then parse through the entire HTML using Regex to get to each table and get each stat. Extremely slow to say the least...
 
